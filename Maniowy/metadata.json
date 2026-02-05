@@ -1,0 +1,7 @@
+{
+  "name": "Galica Med Maniowy | Centrum Medyczne",
+  "description": "Profesjonalna strona lądowania dla placówki medycznej Galica Med Maniowy, zawierająca informacje o poradniach, fizjoterapii i usługach medycznych.",
+  "requestFramePermissions": [
+    "geolocation"
+  ]
+}

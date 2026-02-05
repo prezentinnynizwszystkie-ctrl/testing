@@ -1,0 +1,14 @@
+-- DODANIE KOLUMNY SORTUJĄCEJ DO URZĄDZEŃ
+ALTER TABLE "GMBUrzadzenia" ADD COLUMN IF NOT EXISTS sort_order INTEGER DEFAULT 0;
+
+-- DODANIE KOLUMNY SORTUJĄCEJ DO ZABIEGÓW
+ALTER TABLE "GMBZabiegi" ADD COLUMN IF NOT EXISTS sort_order INTEGER DEFAULT 0;
+
+-- DODANIE KOLUMNY SORTUJĄCEJ DO ZESPOŁU
+ALTER TABLE "GMBZespol" ADD COLUMN IF NOT EXISTS sort_order INTEGER DEFAULT 0;
+
+-- INSTRUKCJA:
+-- 1. Skopiuj powyższe polecenia.
+-- 2. Wklej je w "SQL Editor" w panelu Supabase i kliknij "Run".
+-- 3. Teraz w "Table Editor" możesz wpisywać numery w kolumnie sort_order.
+-- 4. Elementy z niższą liczbą (np. 1) będą wyświetlane jako pierwsze.

@@ -1,0 +1,63 @@
+
+-- 1. TWORZENIE TABELI BEAUTY PLANS
+CREATE TABLE "BeautyPlans" (
+  "id" UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  "created_at" TIMESTAMPTZ DEFAULT NOW(),
+  "client_name" TEXT NOT NULL,
+  "access_code" TEXT NOT NULL UNIQUE, -- To będzie HASŁO klienta
+  "plan_data" JSONB NOT NULL -- Tutaj wklejamy cały JSON z planem
+);
+
+-- 2. WŁĄCZENIE ZABEZPIECZEŃ (RLS)
+ALTER TABLE "BeautyPlans" ENABLE ROW LEVEL SECURITY;
+
+-- UWAGA: NIE dodajemy tutaj żadnej polityki (POLICY) dla "anon" pozwalającej na SELECT.
+-- Dzięki temu tabela jest CAŁKOWICIE NIEWIDOCZNA dla frontendu przy bezpośrednim zapytaniu.
+
+-- 3. TWORZENIE BEZPIECZNEJ FUNKCJI DOSTĘPOWEJ (RPC)
+-- Ta funkcja działa po stronie serwera z uprawnieniami administratora (SECURITY DEFINER),
+-- więc może zajrzeć do zablokowanej tabeli, ale zwraca wynik tylko gdy kod się zgadza.
+
+CREATE OR REPLACE FUNCTION get_beauty_plan(code_input TEXT)
+RETURNS JSONB
+LANGUAGE plpgsql
+SECURITY DEFINER
+AS $$
+BEGIN
+  RETURN (
+    SELECT plan_data
+    FROM "BeautyPlans"
+    WHERE access_code = code_input
+    LIMIT 1
+  );
+END;
+$$;
+
+-- 4. PRZYKŁADOWE DANE (Tylko do testów, możesz usunąć)
+-- Hasło to: test1234
+INSERT INTO "BeautyPlans" ("client_name", "access_code", "plan_data")
+VALUES (
+  'Anna Nowak',
+  'test1234',
+  '{
+  "clientName": "Anna Nowak",
+  "cosmetologistName": "Mgr Dominika Sobańska-Miętuś",
+  "sections": [
+    {
+      "id": 1,
+      "title": "WYWIAD Z KLIENTEM",
+      "fields": [
+        { "label": "Imię i Nazwisko", "value": "Anna Nowak", "key": "name" },
+        { "label": "Cel", "value": "Redukcja przebarwień - Baza Supabase", "key": "goals" }
+      ]
+    },
+    {
+      "id": 2,
+      "title": "PLAN TERAPEUTYCZNY",
+      "fields": [
+        { "label": "Zabieg 1", "value": "Dermapen 4.0", "key": "t1" }
+      ]
+    }
+  ]
+}'::jsonb
+);

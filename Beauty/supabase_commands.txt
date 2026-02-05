@@ -1,0 +1,10 @@
+-- DODANIE KOLUMNY KRÓTKIEGO OPISU DO TABELI ZESPOŁU
+ALTER TABLE "GMBZespol" ADD COLUMN IF NOT EXISTS "ShortText" TEXT;
+
+-- DODANIE KOLUMNY ZDJĘCIA DO TABELI ZESPOŁU
+ALTER TABLE "GMBZespol" ADD COLUMN IF NOT EXISTS "Photo" TEXT;
+
+-- INSTRUKCJA:
+-- 1. Skopiuj powyższe polecenia.
+-- 2. Wklej je w "SQL Editor" w panelu Supabase i kliknij "Run".
+-- 3. W "Table Editor" uzupełnij nowe kolumny dla każdego pracownika.

@@ -1,0 +1,36 @@
+-- 1. DODANIE KOLUMNY VIDEOURL DO TABELI GMBZabiegi
+ALTER TABLE "GMBZabiegi" ADD COLUMN IF NOT EXISTS "VideoUrl" TEXT;
+
+-- 2. DODANIE ZABIEGU PEDICURE I PODOLOGIA
+INSERT INTO "GMBZabiegi" ("Id", "Nazwa", "TextShort", "TextLong", "Cennik", "Photo", "VideoUrl")
+VALUES (
+  't-pedicure',
+  'Zdrowe i zadbane stopy – pedicure i podologia',
+  'Kompleksowa pielęgnacja stóp: od specjalistycznych zabiegów podologicznych po estetyczną stylizację hybrydową i wygładzające kwasy.',
+  '{
+    "whatIsIt": "Profesjonalny pedicure to nie tylko kwestia estetyki – to przede wszystkim zdrowie i komfort stóp. Oferujemy szeroki zakres usług, które łączą pielęgnację, leczenie i profilaktykę problemów stóp, dbając o ich funkcjonalność i wygląd. W ramach pedicure podologicznego wykonujemy specjalistyczną i bezpieczną pielęgnację stóp, prowadzoną przez wykwalifikowanego podologa. Zabieg łączy leczenie i profilaktykę, poprawiając komfort chodzenia, kondycję skóry oraz wygląd paznokci.",
+    "forWhom": "Zabieg przeznaczony jest dla osób w każdym wieku, zarówno kobiet, jak i mężczyzn, a szczególnie dla osób z problemami stóp, takimi jak: bolesne odciski i modzele, pękająca, sucha skóra, wrastające lub zniekształcone paznokcie, nadmierne rogowacenie skóry.",
+    "course": "Pedicure podologiczny obejmuje: profesjonalne opracowanie paznokci (w tym korektę wrastających), usunięcie nadmiernego rogowacenia, modzeli i odcisków, złuszczanie oraz nałożenie specjalistycznych preparatów pielęgnacyjnych. Pedicure kosmetyczny skupia się na estetyce, a hybrydowy zapewnia trwały kolor do kilku tygodni."
+  }',
+  '[
+    {
+      "category": "Pedicure",
+      "items": [
+        {"name": "Pedicure podologiczny", "price": "200 zł"},
+        {"name": "Pedicure hybrydowy", "price": "130 zł"},
+        {"name": "Pedicure kosmetyczny + hybryda", "price": "160 zł"},
+        {"name": "Pedicure kosmetyczny + odżywka", "price": "140 zł"},
+        {"name": "Pedicure kwasowy", "price": "150 zł"},
+        {"name": "Pedicure kwasowy + hybryda", "price": "170 zł"}
+      ]
+    }
+  ]',
+  'https://images.unsplash.com/photo-1519415510236-8617d9144362?auto=format&fit=crop&q=80&w=800',
+  NULL
+) ON CONFLICT ("Id") DO UPDATE SET 
+  "Nazwa" = EXCLUDED."Nazwa", 
+  "TextShort" = EXCLUDED."TextShort", 
+  "TextLong" = EXCLUDED."TextLong", 
+  "Cennik" = EXCLUDED."Cennik", 
+  "Photo" = EXCLUDED."Photo",
+  "VideoUrl" = EXCLUDED."VideoUrl";

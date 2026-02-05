@@ -1,0 +1,85 @@
+
+-- KOMENDY DO SQL EDITOR W SUPABASE
+-- UZUPELNIENIE MAPOWANIA LEKARZY NA PORADNIE (KOLUMNA poradnie)
+
+-- 1. NAJPIERW CZYŚCIMY ISTNIEJĄCE MAPOWANIA (OPCJONALNIE)
+UPDATE "GMPoroninLekarze" SET poradnie = '{}';
+
+-- 2. MAPOWANIE PRECYZYJNE NA PODSTAWIE LISTY (WYKORZYSTUJĄC PODAPYTANIA DO TABELI PORADNI)
+
+-- CHIRURGIA OGÓLNA I NACZYNIOWA
+UPDATE "GMPoroninLekarze" SET poradnie = array_cat(poradnie, ARRAY(SELECT "Id"::text FROM "GMPoroninPoradnieKomercyjne" WHERE "NazwaPoradni" IN ('Chirurgia ogólna', 'Chirurgia naczyniowa')))
+WHERE "TytulImieNazwisko" IN ('Dr n. med. Andrzej Kustra', 'lek. med. Janusz Sroga');
+
+UPDATE "GMPoroninLekarze" SET poradnie = array_append(poradnie, (SELECT "Id"::text FROM "GMPoroninPoradnieKomercyjne" WHERE "NazwaPoradni" = 'Chirurgia ogólna'))
+WHERE "TytulImieNazwisko" IN ('Lek. Paweł Zejler', 'lek. med Jan Podstawski');
+
+UPDATE "GMPoroninLekarze" SET poradnie = array_append(poradnie, (SELECT "Id"::text FROM "GMPoroninPoradnieKomercyjne" WHERE "NazwaPoradni" = 'Proktologia'))
+WHERE "TytulImieNazwisko" = 'lek. med. Janusz Sroga';
+
+-- CHIRURGIA PLASTYCZNA
+UPDATE "GMPoroninLekarze" SET poradnie = array_append(poradnie, (SELECT "Id"::text FROM "GMPoroninPoradnieKomercyjne" WHERE "NazwaPoradni" = 'Chirurgia plastyczna'))
+WHERE "TytulImieNazwisko" = 'Lek. Tomasz Brzoskwinia';
+
+-- ORTOPEDIA
+UPDATE "GMPoroninLekarze" SET poradnie = array_append(poradnie, (SELECT "Id"::text FROM "GMPoroninPoradnieKomercyjne" WHERE "NazwaPoradni" = 'Ortopedia'))
+WHERE "TytulImieNazwisko" IN ('Lek. Jarosław Jurkowski', 'Lek. Aleksander Winiarski', 'Lek. Wojciech Wolski', 'Lek. Grzegorz Makieła', 'lek. med. Mateusz Gruca');
+
+UPDATE "GMPoroninLekarze" SET poradnie = array_cat(poradnie, ARRAY(SELECT "Id"::text FROM "GMPoroninPoradnieKomercyjne" WHERE "NazwaPoradni" IN ('Ortopedia', 'Ortopedia dziecięca / Preluksacja')))
+WHERE "TytulImieNazwisko" = 'Dr n. med. Barbara Jasiewicz';
+
+-- FIZJOTERAPIA
+UPDATE "GMPoroninLekarze" SET poradnie = array_append(poradnie, (SELECT "Id"::text FROM "GMPoroninPoradnieKomercyjne" WHERE "NazwaPoradni" = 'Fizjoterapia i rehabilitacja'))
+WHERE "TytulImieNazwisko" = 'mgr Adrian Kurpiel';
+
+-- KARDIOLOGIA
+UPDATE "GMPoroninLekarze" SET poradnie = array_append(poradnie, (SELECT "Id"::text FROM "GMPoroninPoradnieKomercyjne" WHERE "NazwaPoradni" = 'Kardiologia'))
+WHERE "TytulImieNazwisko" IN ('Lek. Agnieszka Starzykiewicz-Dolak', 'Lek. Paweł Chruściel', 'lek. med. Ziemowit Wroński');
+
+-- UROLOGIA
+UPDATE "GMPoroninLekarze" SET poradnie = array_append(poradnie, (SELECT "Id"::text FROM "GMPoroninPoradnieKomercyjne" WHERE "NazwaPoradni" = 'Urologia'))
+WHERE "TytulImieNazwisko" = 'Dr n. med. Sylwester Kranas';
+
+UPDATE "GMPoroninLekarze" SET poradnie = array_cat(poradnie, ARRAY(SELECT "Id"::text FROM "GMPoroninPoradnieKomercyjne" WHERE "NazwaPoradni" IN ('Urologia dziecięca', 'Chirurgia dziecięca')))
+WHERE "TytulImieNazwisko" = 'Dr n. med. Michał Wolnicki';
+
+-- NEUROLOGIA
+UPDATE "GMPoroninLekarze" SET poradnie = array_append(poradnie, (SELECT "Id"::text FROM "GMPoroninPoradnieKomercyjne" WHERE "NazwaPoradni" = 'Neurologia'))
+WHERE "TytulImieNazwisko" = 'lek. med. Maria Lambrecht';
+
+UPDATE "GMPoroninLekarze" SET poradnie = array_append(poradnie, (SELECT "Id"::text FROM "GMPoroninPoradnieKomercyjne" WHERE "NazwaPoradni" = 'Neurologia dziecięca'))
+WHERE "TytulImieNazwisko" = 'Lek. Eryk Zarzycki';
+
+-- DERMATOLOGIA
+UPDATE "GMPoroninLekarze" SET poradnie = array_append(poradnie, (SELECT "Id"::text FROM "GMPoroninPoradnieKomercyjne" WHERE "NazwaPoradni" = 'Dermatologia'))
+WHERE "TytulImieNazwisko" IN ('lek. med. Małgorzata Gaworczyk', 'lek. Aleksandra Bukowska');
+
+-- PSYCHOLOGIA I PSYCHIATRIA
+UPDATE "GMPoroninLekarze" SET poradnie = array_append(poradnie, (SELECT "Id"::text FROM "GMPoroninPoradnieKomercyjne" WHERE "NazwaPoradni" = 'Psychologia'))
+WHERE "TytulImieNazwisko" IN ('Mgr Anna Kołodziejska', 'Mgr Magdalena Wiertelak');
+
+UPDATE "GMPoroninLekarze" SET poradnie = array_append(poradnie, (SELECT "Id"::text FROM "GMPoroninPoradnieKomercyjne" WHERE "NazwaPoradni" = 'Psychiatria'))
+WHERE "TytulImieNazwisko" IN ('lek. med. Katarzyna Piotrowska', 'lek. med. Agnieszka Widera');
+
+-- PULMONOLOGIA I ALERGOLOGIA
+UPDATE "GMPoroninLekarze" SET poradnie = array_append(poradnie, (SELECT "Id"::text FROM "GMPoroninPoradnieKomercyjne" WHERE "NazwaPoradni" = 'Pulmonologia'))
+WHERE "TytulImieNazwisko" = 'Lek. Stanisław Żygadło';
+
+UPDATE "GMPoroninLekarze" SET poradnie = array_cat(poradnie, ARRAY(SELECT "Id"::text FROM "GMPoroninPoradnieKomercyjne" WHERE "NazwaPoradni" IN ('Pulmonologia dziecięca', 'Alergologia dziecięca')))
+WHERE "TytulImieNazwisko" = 'Lek. med. Jadwiga Biela-Mazur';
+
+-- POZOSTAŁE
+UPDATE "GMPoroninLekarze" SET poradnie = array_append(poradnie, (SELECT "Id"::text FROM "GMPoroninPoradnieKomercyjne" WHERE "NazwaPoradni" = 'Endokrynologia'))
+WHERE "TytulImieNazwisko" = 'Lek. Aleksandra Bernakiewicz';
+
+UPDATE "GMPoroninLekarze" SET poradnie = array_append(poradnie, (SELECT "Id"::text FROM "GMPoroninPoradnieKomercyjne" WHERE "NazwaPoradni" = 'Otolaryngologia'))
+WHERE "TytulImieNazwisko" = 'lek. med. Agata Karlikowska';
+
+UPDATE "GMPoroninLekarze" SET poradnie = array_append(poradnie, (SELECT "Id"::text FROM "GMPoroninPoradnieKomercyjne" WHERE "NazwaPoradni" = 'Onkologia'))
+WHERE "TytulImieNazwisko" = 'lek. med. Tomasz Kacperski';
+
+UPDATE "GMPoroninLekarze" SET poradnie = array_append(poradnie, (SELECT "Id"::text FROM "GMPoroninPoradnieKomercyjne" WHERE "NazwaPoradni" = 'Ginekologia'))
+WHERE "TytulImieNazwisko" = 'lek. med. Maciej Widera';
+
+UPDATE "GMPoroninLekarze" SET poradnie = array_append(poradnie, (SELECT "Id"::text FROM "GMPoroninPoradnieKomercyjne" WHERE "NazwaPoradni" = 'Dietetyka i leczenie otyłości'))
+WHERE "TytulImieNazwisko" = 'Mgr Joanna Antolec';
